@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background-color: #fafafa;
+    color: #222;
+    display: flex;
+    min-height: 100vh;
+}
+aside {
+    width: 240px;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    padding: 2rem 1.5rem;
+    box-sizing: border-box;
+}
+aside h1 {
+    font-size: 1.4em;
+    margin: 0 0 0.2em 0;
+}
+aside p {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 1.5em;
+}
+aside nav a {
+    display: block;
+    margin-bottom: 0.6em;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+aside nav a:hover {
+    color: #007bff;
+}
+main {
+    flex: 1;
+    padding: 2rem 3rem;
+    box-sizing: border-box;
+}
+.post-card {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.2rem;
+    transition: box-shadow 0.2s ease;
+}
+.post-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.post-card h2 {
+    margin: 0;
+    font-size: 1.3em;
+}
+.post-card a {
+    color: #222;
+    text-decoration: none;
+}
+.post-card a:hover {
+    color: #007bff;
+}
+.meta {
+    color: #999;
+    font-size: 0.9em;
+    margin-top: 0.2em;
+}
+.excerpt {
+    margin-top: 0.6em;
+    color: #444;
+}
+footer {
+    margin-top: 3rem;
+    color: #aaa;
+    font-size: 0.85em;
+    text-align: center;
+}

@@ -1,0 +1,44 @@
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.log
+hs_err_pid*
+replay_pid*
+
+### Maven ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Gradle ###
+.gradle/
+build/
+
+### IDEs ###
+# IntelliJ IDEA
+.idea/
+*.iws
+*.ipr
+out/
+# VS Code
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs and temp ###
+logs/
+*.log
+*.tmp
+*.bak
+
+### FreeMarker ###
+*.ftl~
+
+### Misc ###
+# local configs
+.env
+*.local.properties
