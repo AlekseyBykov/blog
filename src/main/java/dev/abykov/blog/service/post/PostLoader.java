@@ -1,9 +1,12 @@
 package dev.abykov.blog.service.post;
 
 import dev.abykov.blog.domain.Post;
+import dev.abykov.blog.repository.PostRepository;
 import dev.abykov.blog.service.markdown.FrontMatterParser;
 import dev.abykov.blog.service.markdown.MarkdownExtractor;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +14,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
+/**
+ * Loads Markdown posts from the file system and saves them into {@link PostRepository}.
+ */
 @Service
 public class PostLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(PostLoader.class);
 
     @Value("${blog.content-path:content/posts}")
     private String contentPath;
@@ -22,62 +31,53 @@ public class PostLoader {
     private final FrontMatterParser frontMatterParser;
     private final MarkdownExtractor markdownExtractor;
     private final PostFactory postFactory;
-
-    private final List<Post> posts = new ArrayList<>();
+    private final PostRepository postRepository;
 
     public PostLoader(
             FrontMatterParser frontMatterParser,
             MarkdownExtractor markdownExtractor,
-            PostFactory postFactory
+            PostFactory postFactory,
+            PostRepository postRepository
     ) {
         this.frontMatterParser = frontMatterParser;
         this.markdownExtractor = markdownExtractor;
         this.postFactory = postFactory;
+        this.postRepository = postRepository;
     }
 
     @PostConstruct
     public void loadPosts() throws IOException {
         Path dir = Paths.get(contentPath);
         if (!Files.exists(dir)) {
+            log.warn("Content directory not found: {}", dir.toAbsolutePath());
             return;
         }
 
         try (var stream = Files.list(dir)) {
-            var loaded = stream
+            var loadedPosts = stream
                     .filter(f -> f.toString().endsWith(".md"))
                     .map(this::tryLoadPost)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .sorted(Comparator.comparing(Post::publishedAt).reversed())
+                    .flatMap(Optional::stream)
                     .toList();
 
-            posts.clear();
-            posts.addAll(loaded);
+            postRepository.clear();
+            loadedPosts.forEach(postRepository::save);
 
-            System.out.println("Loaded " + posts.size() + " posts");
+            log.info("Loaded {} posts from {}", loadedPosts.size(), dir.toAbsolutePath());
         }
     }
 
     private Optional<Post> tryLoadPost(Path file) {
         try {
             String text = Files.readString(file);
-            var parts = markdownExtractor.extract(text);
+            MarkdownExtractor.Parts parts = markdownExtractor.extract(text);
+
             Map<String, Object> meta = frontMatterParser.parse(parts.frontMatter());
             Post post = postFactory.create(meta, parts.content());
             return Optional.of(post);
         } catch (Exception e) {
-            System.err.println("Error loading " + file.getFileName() + ": " + e.getMessage());
+            log.error("Error loading {}: {}", file.getFileName(), e.getMessage());
             return Optional.empty();
         }
-    }
-
-    public List<Post> findPublished() {
-        return posts.stream().filter(Post::published).toList();
-    }
-
-    public Optional<Post> findBySlug(String slug) {
-        return posts.stream()
-                .filter(p -> p.slug().equals(slug) && p.published())
-                .findFirst();
     }
 }
