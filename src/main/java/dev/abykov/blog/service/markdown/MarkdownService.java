@@ -5,6 +5,7 @@ import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.misc.Extension;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,8 @@ public class MarkdownService {
         }
 
         try {
-            return renderer.render(parser.parse(markdown));
+            Document document = parser.parse(markdown);
+            return renderer.render(document);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to render Markdown: " + e.getMessage(), e);
         }

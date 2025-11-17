@@ -1,6 +1,7 @@
 package dev.abykov.blog.service.post;
 
 import dev.abykov.blog.domain.Post;
+import dev.abykov.blog.repository.InMemoryPostRepository;
 import dev.abykov.blog.repository.PostRepository;
 import org.springframework.stereotype.Service;
 

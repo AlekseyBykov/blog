@@ -14,7 +14,7 @@ public class MarkdownExtractor {
     }
 
     /**
-     * Extracts YAML front matter and Markdown content from a text.
+     * Extracts YAML front matter and Markdown content from a markdownContent.
      * <p>
      * Expected format:
      * ---
@@ -22,27 +22,27 @@ public class MarkdownExtractor {
      * ---
      * # Markdown content...
      *
-     * @param text raw Markdown file content
+     * @param markdownContent raw Markdown file content
      * @return separated front matter and content parts
      * @throws IllegalArgumentException if no valid front matter block is found
      */
-    public Parts extract(String text) {
-        if (text == null || text.isBlank()) {
-            throw new IllegalArgumentException("Input text is null or empty");
+    public Parts extract(String markdownContent) {
+        if (markdownContent == null || markdownContent.isBlank()) {
+            throw new IllegalArgumentException("Input markdownContent is null or empty");
         }
 
-        int firstDelimiter = text.indexOf(FRONT_MATTER_DELIMITER);
+        int firstDelimiter = markdownContent.indexOf(FRONT_MATTER_DELIMITER);
         if (firstDelimiter != 0) {
             throw new IllegalArgumentException("Front matter must start at the beginning of the file");
         }
 
-        int secondDelimiter = text.indexOf(FRONT_MATTER_DELIMITER, FRONT_MATTER_DELIMITER.length());
+        int secondDelimiter = markdownContent.indexOf(FRONT_MATTER_DELIMITER, FRONT_MATTER_DELIMITER.length());
         if (secondDelimiter == -1) {
             throw new IllegalArgumentException("Missing closing front matter delimiter");
         }
 
-        String frontMatter = text.substring(firstDelimiter + FRONT_MATTER_DELIMITER.length(), secondDelimiter).trim();
-        String content = text.substring(secondDelimiter + FRONT_MATTER_DELIMITER.length()).trim();
+        String frontMatter = markdownContent.substring(firstDelimiter + FRONT_MATTER_DELIMITER.length(), secondDelimiter).trim();
+        String content = markdownContent.substring(secondDelimiter + FRONT_MATTER_DELIMITER.length()).trim();
 
         return new Parts(frontMatter, content);
     }

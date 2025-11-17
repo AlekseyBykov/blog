@@ -1,6 +1,7 @@
 package dev.abykov.blog.service.post;
 
 import dev.abykov.blog.domain.Post;
+import dev.abykov.blog.repository.InMemoryPostRepository;
 import dev.abykov.blog.repository.PostRepository;
 import dev.abykov.blog.service.markdown.FrontMatterParser;
 import dev.abykov.blog.service.markdown.MarkdownExtractor;
@@ -14,11 +15,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
- * Loads Markdown posts from the file system and saves them into {@link PostRepository}.
+ * Loads Markdown posts from the file system and saves them into {@link InMemoryPostRepository}.
  */
 @Service
 public class PostLoader {
@@ -53,9 +56,9 @@ public class PostLoader {
             return;
         }
 
-        try (var stream = Files.list(dir)) {
-            var loadedPosts = stream
-                    .filter(f -> f.toString().endsWith(".md"))
+        try (Stream<Path> filePaths = Files.list(dir)) {
+            List<Post> loadedPosts = filePaths
+                    .filter(filePath -> filePath.toString().endsWith(".md"))
                     .map(this::tryLoadPost)
                     .flatMap(Optional::stream)
                     .toList();
@@ -63,20 +66,24 @@ public class PostLoader {
             postRepository.clear();
             loadedPosts.forEach(postRepository::save);
 
-            log.info("Loaded {} posts from {}", loadedPosts.size(), dir.toAbsolutePath());
+            log.info(
+                    "Loaded {} posts from {}",
+                    loadedPosts.size(),
+                    dir.toAbsolutePath()
+            );
         }
     }
 
-    private Optional<Post> tryLoadPost(Path file) {
+    private Optional<Post> tryLoadPost(Path filePath) {
         try {
-            String text = Files.readString(file);
-            MarkdownExtractor.Parts parts = markdownExtractor.extract(text);
+            String markdownContent = Files.readString(filePath);
+            MarkdownExtractor.Parts parts = markdownExtractor.extract(markdownContent);
 
             Map<String, Object> meta = frontMatterParser.parse(parts.frontMatter());
             Post post = postFactory.create(meta, parts.content());
             return Optional.of(post);
         } catch (Exception e) {
-            log.error("Error loading {}: {}", file.getFileName(), e.getMessage());
+            log.error("Error loading {}: {}", filePath.getFileName(), e.getMessage());
             return Optional.empty();
         }
     }
