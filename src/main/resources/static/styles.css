@@ -74,3 +74,61 @@ footer {
     font-size: 0.85em;
     text-align: center;
 }
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f6f7f8;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 280px;
+    background: #f2f3f5;
+    padding: 2rem 1.5rem;
+    box-sizing: border-box;
+}
+
+.main-content {
+    flex: 1;
+    padding: 3rem;
+    background: #ffffff;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 2rem;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.menu a:hover {
+    color: #5c68e8;
+}

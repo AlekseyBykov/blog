@@ -1,80 +1,29 @@
 <#ftl output_format="HTML">
 
 <#macro content>
-    <!DOCTYPE html>
-    <html lang="ru">
-        <head>
-            <meta charset="UTF-8">
-            <title>${title!"Blog"}</title>
-            <style>
-                body {
-                    font-family: system-ui, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                    background-color: #f8f9fa;
-                    color: #222;
-                }
 
-                header, footer {
-                    background: #343a40;
-                    color: white;
-                    padding: 1rem 2rem;
-                }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${title!"abykov.dev"}</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
 
-                header a, footer a {
-                    color: #fff;
-                    text-decoration: none;
-                }
+<div class="app-layout">
 
-                main {
-                    max-width: 800px;
-                    margin: 2rem auto;
-                    background: white;
-                    padding: 2rem;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                }
+    <aside class="sidebar">
+        <#include "sidebar.ftl">
+    </aside>
 
-                h1, h2, h3 {
-                    color: #333;
-                }
+    <main class="main-content">
+        <#nested>
+    </main>
 
-                a {
-                    color: #5c68e8;
-                    text-decoration: none;
-                }
+</div>
 
-                a:hover {
-                    text-decoration: underline;
-                }
+</body>
+</html>
 
-                .meta {
-                    color: #777;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                }
-
-                .post-card {
-                    margin-bottom: 2rem;
-                    border-bottom: 1px solid #ddd;
-                    padding-bottom: 1rem;
-                }
-            </style>
-        </head>
-        <body>
-            <header>
-                <h1>
-                    <a href="/">Blog</a>
-                </h1>
-            </header>
-
-            <main>
-                <#nested>
-            </main>
-
-            <footer>
-                <p>${.now?string("yyyy")} Blog powered by Spring Boot + FreeMarker</p>
-            </footer>
-        </body>
-    </html>
 </#macro>
