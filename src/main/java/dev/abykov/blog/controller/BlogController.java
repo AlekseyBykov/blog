@@ -29,14 +29,14 @@ public class BlogController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String index(Model model) {
         List<Post> posts = postService.getPublishedPosts();
         model.addAttribute("posts", posts);
         return "index";
     }
 
     @GetMapping("/post/{slug}")
-    public String post(@PathVariable String slug, Model model) {
+    public String showPost(@PathVariable String slug, Model model) {
         Post post = postService.getPostBySlug(slug)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 

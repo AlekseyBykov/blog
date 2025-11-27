@@ -10,7 +10,7 @@
                 <a href="/post/${p.slug()}">${p.title()}</a>
             </h2>
             <div class="meta">
-                ${p.publishedAt()!""}
+                ${p.publishedAt()}
             </div>
             <div>
                 ${p.excerpt()}

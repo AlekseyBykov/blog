@@ -4,11 +4,11 @@
 
 <@layout.content>
     <article>
-        <h2>${post.title}</h2>
-        <p class="meta">Published: ${post.publishedAt}</p>
+        <h2>${post.title()}</h2>
+        <p class="meta">Published: ${post.publishedAt()}</p>
 
         <div style="margin-top:1.5rem; line-height:1.7;">
-            ${post.contentHtml?no_esc}
+            ${post.contentHtml()?no_esc}
         </div>
 
         <p style="margin-top:2rem;">

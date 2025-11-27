@@ -5,7 +5,7 @@
     <html lang="ru">
         <head>
             <meta charset="UTF-8">
-            <title>${title!"Блог"}</title>
+            <title>${title!"Blog"}</title>
             <style>
                 body {
                     font-family: system-ui, sans-serif;
@@ -64,7 +64,7 @@
         <body>
             <header>
                 <h1>
-                    <a href="/">Мой блог</a>
+                    <a href="/">Blog</a>
                 </h1>
             </header>
 
